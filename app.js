@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -8,8 +7,14 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var socketio = require('socket.io')
 
 var app = express();
+
+io = socketio.listen(app);
+io.configure('development', function() {
+	io.set('log level', 1);
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -28,12 +33,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), function() {
+	console.log('Express server listening on port ' + app.get('port'));
+});
+
+io.sockets.on('connection', function(socket) {
+	socket.on('event', function(event) {
+		socket.join(event);
+	});
 });
