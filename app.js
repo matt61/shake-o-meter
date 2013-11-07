@@ -5,16 +5,11 @@
 var express = require('express');
 var routes = require('./routes');
 var admin = require('./routes/admin');
+var device = require('./routes/device');
 var http = require('http');
 var path = require('path');
-var socketio = require('socket.io')
 
 var app = express();
-
-io = socketio.listen(app);
-io.configure('development', function() {
-	io.set('log level', 1);
-});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -31,17 +26,21 @@ app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// development only
-if ('development' == app.get('env')) {
-	app.use(express.errorHandler());
-}
-
+//Routes
 app.get('/', routes.index);
 app.get('/admin', admin.index);
+app.get('/device', device.index);
 
-http.createServer(app).listen(app.get('port'), function() {
+server = http.createServer(app).listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + app.get('port'));
 });
+
+io = require('socket.io').listen(server);
+
+if ('development' == app.get('env')) {
+	app.use(express.errorHandler());
+	io.set('log level', 1);
+}
 
 io.sockets.on('connection', function(socket) {
 	socket.on('event', function(event) {
