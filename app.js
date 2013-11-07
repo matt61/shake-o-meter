@@ -8,10 +8,11 @@ var admin = require('./routes/admin');
 var device = require('./routes/device');
 var http = require('http');
 var path = require('path');
-pg = require('pg').native;
-connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
+//var pg = require('pg').native;
+//connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 
-app = express();
+var app = express();
+
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -29,6 +30,9 @@ app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var server = http.createServer(app).listen(3000);
+var io = require('socket.io').listen(server);
+
 /**
  * Initial database setup
  */
@@ -44,23 +48,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Routes
 app.get('/', routes.index);
 app.get('/admin', admin.index);
+app.get('/admin/results', admin.results);
 app.get('/device', device.index);
 app.get('/device/shake', device.shake);
 app.post('/device/shook', device.shook);
-
-server = http.createServer(app).listen(app.get('port'), function() {
-	console.log('Express server listening on port ' + app.get('port'));
-});
-
-io = require('socket.io').listen(server);
 
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 	io.set('log level', 1);
 }
 
-io.sockets.on('connection', function(socket) {
-	socket.on('event', function(event) {
-		socket.join(event);
-	});
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
 });
+

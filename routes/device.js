@@ -6,16 +6,18 @@ exports.shake = function(req, res){
   res.render('device/shake', { event: '1' });
 };
 exports.shook = function(req, res){		
-	pg.connect(connection_string, function(err, client, done) {
-	  if(err) {
-	    return console.error('error fetching client from pool', err);
-	  }
-	  client.query({text: 'INSERT INTO movements (event_id, motion, amplitude, frequency, created_at) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP);', values:[req.body.event, req.body.motion, req.body.amplitude, req.body.frequency]}, function(err, result) {
-	    done();
-
-	    if(err) {
-	      return console.error('error running query', err);
-	    }
-	  });
-	});
+	io.sockets.in('room').emit('message', {foo:'bar'});
+	
+//	pg.connect(connection_string, function(err, client, done) {
+//	  if(err) {
+//	    return console.error('error fetching client from pool', err);
+//	  }
+//	  client.query({text: 'INSERT INTO movements (event_id, motion, amplitude, frequency, created_at) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP);', values:[req.body.event, req.body.motion, req.body.amplitude, req.body.frequency]}, function(err, result) {
+//	    done();
+//
+//	    if(err) {
+//	      return console.error('error running query', err);
+//	    }
+//	  });
+//	});
 };
