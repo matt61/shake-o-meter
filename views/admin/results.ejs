@@ -10,18 +10,16 @@
 	<script src="/socket.io/socket.io.js"></script>
 	
     <script>
-    	var chart;
+
+    	var clapping;
+    	var participants;
+    	var uids = Object();
     	$(function () {
-		    chart = new Highcharts.Chart({
+		    clapping = new Highcharts.Chart({
 		    
 		        chart: {
-		            renderTo: 'container',
+		            renderTo: 'container_1',
 		            type: 'gauge',
-		            alignTicks: false,
-		            plotBackgroundColor: null,
-		            plotBackgroundImage: null,
-		            plotBorderWidth: 0,
-		            plotShadow: false
 		        },
 		    
 		        title: {
@@ -36,64 +34,17 @@
 		        yAxis: [{
 		            min: 0,
 		            max: 200,
-		            lineColor: '#339',
-		            tickColor: '#339',
-		            minorTickColor: '#339',
-		            offset: -25,
-		            lineWidth: 2,
-		            labels: {
-		                distance: -20,
-		                rotation: 'auto'
-		            },
-		            tickLength: 5,
-		            minorTickLength: 5,
-		            endOnTick: false
-		        }, {
-		            min: 0,
-		            max: 124,
-		            tickPosition: 'outside',
-		            lineColor: '#933',
-		            lineWidth: 2,
-		            minorTickPosition: 'outside',
-		            tickColor: '#933',
-		            minorTickColor: '#933',
-		            tickLength: 5,
-		            minorTickLength: 5,
-		            labels: {
-		                distance: 12,
-		                rotation: 'auto'
-		            },
-		            offset: -20,
-		            endOnTick: false
 		        }],
 		    
 		        series: [{
 		            name: 'Enthusiasm',
 		            data: [0],
-		            dataLabels: {
-		                
-		                backgroundColor: {
-		                    linearGradient: {
-		                        x1: 0,
-		                        y1: 0,
-		                        x2: 0,
-		                        y2: 1
-		                    },
-		                    stops: [
-		                        [0, '#DDD'],
-		                        [1, '#FFF']
-		                    ]
-		                }
-		            },
-		            tooltip: {
-		                valueSuffix: ' km/h'
-		            }
 		        }]
 		    
 		    },
-		     function(chart) {
+		     function(clapping) {
 		        setInterval(function() {
-		            var point = chart.series[0].points[0];
+		            var point = clapping.series[0].points[0];
 		            var newVal;
 		    
 		            if (point.y > 0) {
@@ -105,16 +56,66 @@
 		        }, 100);
 		    
 		    });
+		    
+		    participants = new Highcharts.Chart({
+		    
+		        chart: {
+		            renderTo: 'container_2',
+		            type: 'bar',
+		        },
+		    
+		        title: {
+		            text: 'Participants'
+		        },
+		                 		    
+		        yAxis: [{
+		            min: 0,
+		            max: 20,
+		        }],
+		    
+		        series: [
+		        {
+		            name: 'Current',
+		            data: [0],
+		        }
+		        ]
+		    
+		    },
+		     function(participants) {
+		        setInterval(function() {
+		        	
+		            var point = participants.series[0].points[0];
+		            var newVal;
+		    
+		            if (point.y > 0) {
+		                newVal = point.y - 0.01;
+		            }
+		            
+		            var now = new Date().getTime();
+		            
+		            for (var key in uids) {
+		            	if (uids[key] < now - 1000){
+		            		delete uids[key];
+		            	}
+		            }
+
+		            point.update(Object.keys(uids).length);
+		    
+		        }, 100);
+		    
+		    });
 		});
     	
     	var socket = io.connect('http://localhost:3000');
 		socket.emit('event', '<%= event %>');
 		socket.on('message', function (data) {
-			var point = chart.series[0].points[0]
+			uids[data.user] = new Date().getTime();
+			
+			var point = clapping.series[0].points[0];
 			var newVal;
      
 	        if (point.y < 200) {
-	            newVal = point.y + parseInt(data.count);
+	            newVal = point.y + parseInt(data.power);
 	        }
 	
 	        point.update(newVal);
@@ -123,6 +124,7 @@
 	</script>
   </head>
   <body>
-    <div id="container" style="min-width: 400px; height: 500px; margin: 0 auto"></div>
+    <div id="container_1" style="min-width: 400px; height: 500px; margin: 0 auto"></div>
+    <div id="container_2" style="min-width: 400px; height: 500px; margin: 0 auto"></div>
   </body>
 </html>
