@@ -7,9 +7,7 @@ exports.shake = function(req, res){
 };
 exports.shook = function(req, res){		
 	io.sockets.in(req.body.event).emit('message', {motion: req.body.motion, amplitude: req.body.amplitude, frequency: req.body.frequency, count: 1});
-	
-	//io.sockets.emit('message', {motion: req.body.motion, amplitude: req.body.amplitude, frequency: req.body.frequency, count: 1});
-	
+
 //	pg.connect(connection_string, function(err, client, done) {
 //	  if(err) {
 //	    return console.error('error fetching client from pool', err);
