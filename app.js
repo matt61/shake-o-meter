@@ -31,7 +31,7 @@ app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 var server = http.createServer(app).listen(3000);
-var io = require('socket.io').listen(server);
+io = require('socket.io').listen(server);
 
 /**
  * Initial database setup
@@ -43,7 +43,6 @@ var io = require('socket.io').listen(server);
 //client.query('CREATE TABLE events (id SERIAL, lat float, long float, event_date timestamp);');
 //client.query('CREATE TABLE movements (id SERIAL, event_id int, device varchar, motion varchar, frequency float, amplitude float, created_at timestamp);');
 //client.query('CREATE INDEX ON movements (event_id, motion, created_at);');
-
 
 //Routes
 app.get('/', routes.index);
@@ -58,10 +57,10 @@ if ('development' == app.get('env')) {
 	io.set('log level', 1);
 }
 
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+io.sockets.on('connection', function(socket) {
+	socket.on('event', function(event) {
+		socket.join(event);
+		console.log("Joining event: " + event);
+	});
 });
 

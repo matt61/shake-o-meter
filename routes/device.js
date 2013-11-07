@@ -6,7 +6,9 @@ exports.shake = function(req, res){
   res.render('device/shake', { event: '1' });
 };
 exports.shook = function(req, res){		
-	io.sockets.in('room').emit('message', {foo:'bar'});
+	io.sockets.in(req.body.event).emit('message', {motion: req.body.motion, amplitude: req.body.amplitude, frequency: req.body.frequency, count: 1});
+	
+	//io.sockets.emit('message', {motion: req.body.motion, amplitude: req.body.amplitude, frequency: req.body.frequency, count: 1});
 	
 //	pg.connect(connection_string, function(err, client, done) {
 //	  if(err) {

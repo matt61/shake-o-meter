@@ -5,7 +5,7 @@ exports.index = function(req, res) {
 };
 exports.results = function(req, res) {
 	res.render('admin/results', {
-		title : 'Express'
+		event : '1'
 	});
 };
 
