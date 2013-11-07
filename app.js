@@ -8,8 +8,10 @@ var admin = require('./routes/admin');
 var device = require('./routes/device');
 var http = require('http');
 var path = require('path');
+pg = require('pg').native;
+connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 
-var app = express();
+app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -22,15 +24,29 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
+app.use(express.bodyParser());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+/**
+ * Initial database setup
+ */
+
+//var connection_string = process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
+//var client = new pg.Client(connection_string);
+//client.connect();
+//client.query('CREATE TABLE events (id SERIAL, lat float, long float, event_date timestamp);');
+//client.query('CREATE TABLE movements (id SERIAL, event_id int, device varchar, motion varchar, frequency float, amplitude float, created_at timestamp);');
+//client.query('CREATE INDEX ON movements (event_id, motion, created_at);');
+
 
 //Routes
 app.get('/', routes.index);
 app.get('/admin', admin.index);
 app.get('/device', device.index);
 app.get('/device/shake', device.shake);
+app.post('/device/shook', device.shook);
 
 server = http.createServer(app).listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + app.get('port'));
