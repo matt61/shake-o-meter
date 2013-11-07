@@ -14,8 +14,10 @@
 	<body>
 		<div>
 			<form id="manual">
-				<input type="text" value="Hello there">
-				<input type="submit" value="Go" id="manual_submit">
+				<input type="text" id="motion" value="clap">
+				<input type="text" id="amp" value="1">
+				<input type="text" id="freq" value="1">
+				<input type="submit" id="manual" value="Go">
 			</form>
 		</div>
 		<div id="content">
@@ -24,21 +26,16 @@
 		
 		<script type="text/javascript">
 		
-			$("#manual_submit").submit(function() {
-			    $.ajax({
-			           type: "POST",
-			           url: "shook?id=<%= event %>",
-			           data: $("#manual").serialize(),
-			           success: function(data)
-			           {
-			               alert(data);
-			           }
-			         });
-			
-			    return false;
+			$("#manual").submit(function( event ) {
+				event.preventDefault();
+				var motion = $("#motion").val();
+				var freq = $("#freq").val();
+				var amp = $("#amp").val();
+				$.post( "shook", { motion: motion, freq: freq, amp: amp }).done(function( data ) {
+					alert( "Data Loaded: " + data );
+				});
 			});
-		
-		
+				
 		</script>
 	
 	</body>
