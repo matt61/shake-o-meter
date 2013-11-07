@@ -90,17 +90,31 @@
 		            }
 		        }]
 		    
+		    },
+		     function(chart) {
+		        setInterval(function() {
+		            var point = chart.series[0].points[0];
+		            var newVal;
+		    
+		            if (point.y > 0) {
+		                newVal = point.y - 2;
+		            }
+		    
+		            point.update(newVal);
+		    
+		        }, 100);
+		    
 		    });
 		});
     	
     	var socket = io.connect('http://localhost:3000');
 		socket.emit('event', '<%= event %>');
 		socket.on('message', function (data) {
-			var point = chart.series[0].points[0], newVal, inc = Math.round((Math.random() - 0.5) * 20);
-	
-	        newVal = point.y + parseInt(data.count);
-	        if (newVal < 0 || newVal > 200) {
-	            newVal = point.y - inc;
+			var point = chart.series[0].points[0]
+			var newVal;
+     
+	        if (point.y < 200) {
+	            newVal = point.y + parseInt(data.count);
 	        }
 	
 	        point.update(newVal);

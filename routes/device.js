@@ -5,8 +5,9 @@ exports.index = function(req, res){
 exports.shake = function(req, res){
   res.render('device/shake', { event: '1' });
 };
-exports.shook = function(req, res){		
-	io.sockets.in(req.body.event).emit('message', {motion: req.body.motion, amplitude: req.body.amplitude, frequency: req.body.frequency, count: 1});
+exports.shook = function(req, res){
+	io.sockets.in(req.body.event).emit('message', {motion: req.body.motion, amplitude: req.body.amplitude, frequency: req.body.frequency, count: 10});
+	res.send('OK');
 
 //	pg.connect(connection_string, function(err, client, done) {
 //	  if(err) {

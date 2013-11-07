@@ -31,8 +31,8 @@
 				var motion = $("#motion").val();
 				var frequency = $("#frequency").val();
 				var amplitude = $("#amplitude").val();
-				$.post( "shook", { event: 1, motion: motion, frequency: frequency, amplitude: amplitude }).done(function( data ) {
-					alert( "Data Loaded: " + data );
+				$.post( "shook", {event: 1, motion: motion, frequency: frequency, amplitude: amplitude }).done(function( data ) {
+					console.log( "Data Loaded: " + data );
 				});
 			});
 				
