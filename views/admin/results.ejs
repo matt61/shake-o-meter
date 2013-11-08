@@ -210,13 +210,41 @@
 		}
     	
 	</script>
+	<style>
+		body
+		{
+			background-color: white;
+		}
+		div.graphs
+		{
+			border:4px solid;
+			border-radius:25px;
+			margin-top: 20px;
+			padding: 10px;
+			padding-right: 30px;
+			padding-left: 30px;
+			margin-bottom: 20px;
+		}
+		div.header 
+		{
+			height: 150px;
+			font-weight: bold;
+			font-size: 20pt;
+			background-image:url('/images/cheering.jpg');
+			background-repeat:repeat-x;
+			background-position:center bottom; 
+			opacity:.75; 
+		}
+	</style>
   </head>
   <body>
-  	<div style="font-weight: bold;">Dashboard: <%= name%></div>
-    <div id="container_1" style="float:left;"></div>
-    <div id="container_2" style="width: 50%;"></div>
-    <br style="clear: both;"/>
-    <div id="container_3" style=""></div>
+  	<div class="header">Dashboard: <%= name%></div>
+  	<div class="graphs">
+	    <div id="container_1" style="float:left;"></div>
+	    <div id="container_2" style="width: 50%; float: right;"></div>
+	    <br style="clear: both;"/>
+	    <div id="container_3" style="width: 100%"></div>
+    </div>
     <input type="text" id="scaler" value="1" size="2"/>
     <input type="text" id="decay" value="5000" size="4"/>
   </body>
