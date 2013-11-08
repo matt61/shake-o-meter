@@ -12,6 +12,7 @@
   "dependencies": {
     "pg": "0.6.15",
   	"express": "latest",
+  	"mobile-detect" : "latest",
     "ejs": "*",
     "stylus": "*",
     "pg": "*",
