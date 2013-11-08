@@ -40,15 +40,14 @@ io = require('socket.io').listen(server);
 //var client = new pg.Client(connection_string);
 //client.connect();
 //client.query('CREATE TABLE events (id SERIAL, lat float, long float, event_date timestamp);');
-//client.query('CREATE TABLE movements (id SERIAL, event_id int, device varchar, motion varchar, frequency float, amplitude float, created_at timestamp);');
-//client.query('CREATE INDEX ON movements (event_id, motion, created_at);');
+
 
 //Routes
 app.get('/', routes.index);
 app.get('/admin', admin.index);
-app.get('/admin/results', admin.results);
+app.get('/admin/:id/results', admin.results);
 app.get('/device', device.index);
-app.get('/device/shake', device.shake);
+app.get('/device/:id/shake', device.shake);
 app.post('/device/shook', device.shook);
 
 if ('development' == app.get('env')) {
@@ -59,7 +58,6 @@ if ('development' == app.get('env')) {
 io.sockets.on('connection', function(socket) {
 	socket.on('event', function(event) {
 		socket.join(event);
-		console.log("Joining event: " + event);
 	});
 });
 

@@ -1,11 +1,7 @@
 exports.index = function(req, res) {
-	res.render('admin/index', {
-		title : 'Express'
-	});
+	res.render('admin/index', {title : 'Express'});
 };
 exports.results = function(req, res) {
-	res.render('admin/results', {
-		event : '1'
-	});
+	res.render('admin/results', {event : req.params.id});
 };
 

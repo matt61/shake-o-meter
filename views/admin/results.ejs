@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Test</title>
+    <title>Event <%= event%></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="http://code.highcharts.com/highcharts.js"></script>
@@ -11,11 +11,12 @@
 	
     <script>
 
-    	var clapping;
-    	var participants;
-    	var uids = Object();
+    	var clapping_chart;
+    	var participant_chart;
+    	var current_participants = Object();
+    	var total_participants = Object();
     	$(function () {
-		    clapping = new Highcharts.Chart({
+		    clapping_chart = new Highcharts.Chart({
 		    
 		        chart: {
 		            renderTo: 'container_1',
@@ -42,9 +43,9 @@
 		        }]
 		    
 		    },
-		     function(clapping) {
+		     function(clapping_chart) {
 		        setInterval(function() {
-		            var point = clapping.series[0].points[0];
+		            var point = clapping_chart.series[0].points[0];
 		            var newVal;
 		    
 		            if (point.y > 0) {
@@ -57,7 +58,7 @@
 		    
 		    });
 		    
-		    participants = new Highcharts.Chart({
+		    participant_chart = new Highcharts.Chart({
 		    
 		        chart: {
 		            renderTo: 'container_2',
@@ -77,14 +78,18 @@
 		        {
 		            name: 'Current',
 		            data: [0],
+		        },
+		        {
+		            name: 'Total',
+		            data: [0],
 		        }
 		        ]
 		    
 		    },
-		     function(participants) {
+		     function(participant_chart) {
 		        setInterval(function() {
 		        	
-		            var point = participants.series[0].points[0];
+		            var point = participant_chart.series[0].points[0];
 		            var newVal;
 		    
 		            if (point.y > 0) {
@@ -93,13 +98,13 @@
 		            
 		            var now = new Date().getTime();
 		            
-		            for (var key in uids) {
-		            	if (uids[key] < now - 1000){
-		            		delete uids[key];
+		            for (var key in current_participants) {
+		            	if (current_participants[key] < now - 1000){
+		            		delete current_participants[key];
 		            	}
 		            }
 
-		            point.update(Object.keys(uids).length);
+		            point.update(Object.keys(current_participants).length);
 		    
 		        }, 100);
 		    
@@ -108,10 +113,17 @@
     	
     	var socket = io.connect('http://localhost:3000');
 		socket.emit('event', '<%= event %>');
+		
+		socket.on('join', function (data) {
+			total_participants[data.user] = new Date().getTime();
+			var point = participant_chart.series[1].points[0];
+     		point.update(Object.keys(total_participants).length);
+		});
+		
 		socket.on('message', function (data) {
-			uids[data.user] = new Date().getTime();
+			current_participants[data.user] = new Date().getTime();
 			
-			var point = clapping.series[0].points[0];
+			var point = clapping_chart.series[0].points[0];
 			var newVal;
      
 	        if (point.y < 200) {
@@ -124,6 +136,7 @@
 	</script>
   </head>
   <body>
+  	<b>Managing Event: <%= event%>
     <div id="container_1" style="min-width: 400px; height: 500px; margin: 0 auto"></div>
     <div id="container_2" style="min-width: 400px; height: 500px; margin: 0 auto"></div>
   </body>

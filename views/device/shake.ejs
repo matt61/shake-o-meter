@@ -13,6 +13,7 @@
 
 	<body>
 		<div>
+			You are in event: <%= event %>
 			<form id="manual">
 				<input type="text" id="motion" value="clap">
 				<input type="text" id="amplitude" value="1">
@@ -31,7 +32,7 @@
 				var motion = $("#motion").val();
 				var frequency = $("#frequency").val();
 				var amplitude = $("#amplitude").val();
-				$.post( "shook", {event: 1, motion: motion, frequency: frequency, amplitude: amplitude }).done(function( data ) {
+				$.post( "../shook", {event: <%= event %>, motion: motion, frequency: frequency, amplitude: amplitude }).done(function( data ) {
 					console.log( "Data Loaded: " + data );
 				});
 			});
