@@ -61,6 +61,10 @@ if ('development' == app.get('env')) {
 	io.set('log level', 1);
 }
 
+io.sockets.on("disconnect", function(socket) {
+    socket.reconnect();
+});
+
 io.sockets.on('connection', function(socket) {
 	socket.on('event', function(event) {
 		socket.join(event);
