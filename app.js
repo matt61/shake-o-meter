@@ -9,10 +9,17 @@ var device = require('./routes/device');
 var http = require('http');
 var path = require('path');
 var pg = require('pg').native;
-var orm = require('orm');
-connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
+orm = require('orm');
+//connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 
 var app = express();
+
+app.use(orm.express(process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake', {
+    define: function (db, models, next) {
+        models.event = db.define("events", {id: Number, name: String,});
+        next();
+    }
+}));
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -29,12 +36,6 @@ app.use(express.bodyParser());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(orm.express(process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake', {
-    define: function (db, models, next) {
-        models.event = db.define("event", {id: Number, name: String,});
-        next();
-    }
-}));
 
 var server = http.createServer(app).listen(3000);
 io = require('socket.io').listen(server);
