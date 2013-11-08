@@ -8,7 +8,8 @@ exports.participants = function(req, res) {
 };
 exports.history = function(req, res) {
 	history = [];
-	req.models.response.find({event_id: req.params.id}, function(err, responses) {
+	var seconds = (new Date().getTime() / 1000) - 1000;
+	req.models.response.find({event_id: req.params.id}).where("response_time > ?", [seconds]).all(function(err, responses) {
 		for(var i=0;i<responses.length;i++){
 			history.push([responses[i].response_time, responses[i].response_count]);
 		}
