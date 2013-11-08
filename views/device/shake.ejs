@@ -3,10 +3,17 @@
 	<head>
 		<title>Shaker</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<meta name="viewport" content="width=device-width,user-scalable=yes" />
+		<script type="text/javascript" src="/javascripts/shake-o-meter.js"></script>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<style>
 			body {
-				font-family: helvetica, arial, sans serif;
+				background: #E9E9E9; 
+				color: #333; 
+				font: 1em/1.3em "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; /* 16px / 21px */
+				text-shadow: rgba(255,255,255,0.8) 0 1px 0;
+				text-align: center;
 			}
 		</style>
 	</head>
@@ -22,7 +29,7 @@
 			</form>
 		</div>
 		<div id="content">
-	
+			<a href="../">Exit Poll</a>
 		</div>
 		
 		<script type="text/javascript">
@@ -33,10 +40,44 @@
 				var frequency = $("#frequency").val();
 				var amplitude = $("#amplitude").val();
 				$.post( "../shook", {event: <%= event %>, motion: motion, frequency: frequency, amplitude: amplitude }).done(function( data ) {
-					console.log( "Data Loaded: " + data );
+					console.log( "Response: " + data );
 				});
 			});
+
 				
+		</script>
+		<script type="text/javascript">
+			screenwhite = true;
+			num_claps = 0;
+			window.onload = function() {
+			
+				setInterval(
+					function(){
+						if (num_claps > 0){
+							$.post( "../shook", {event: <%= event %>, motion: 'clap', frequency: num_claps, amplitude: 4 }).done(function( data ) {
+								console.log( "Response: " + data );
+							});
+							num_claps = 0;
+						}
+					},2000);
+			
+				window.addEventListener('shake', shakeEventDidOccur, false);
+				
+				//define a custom method to fire when shake occurs.
+				function shakeEventDidOccur () {
+					num_claps = num_claps + 1;
+			
+					if(screenwhite == true){
+						document.body.style.backgroundColor = '#ff0';
+						screenwhite = false;
+					}
+					else{
+						document.body.style.backgroundColor = '#fff';
+						screenwhite = true;
+					}
+			
+				}
+			};
 		</script>
 	
 	</body>

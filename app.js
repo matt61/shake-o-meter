@@ -8,8 +8,9 @@ var admin = require('./routes/admin');
 var device = require('./routes/device');
 var http = require('http');
 var path = require('path');
-//var pg = require('pg').native;
-//connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
+var pg = require('pg').native;
+var orm = require('orm');
+connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 
 var app = express();
 
@@ -28,6 +29,12 @@ app.use(express.bodyParser());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(orm.express(process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake', {
+//    define: function (db, models, next) {
+//        models.event = db.define("event", { ... });
+//        next();
+//    }
+//}));
 
 var server = http.createServer(app).listen(3000);
 io = require('socket.io').listen(server);
@@ -36,10 +43,9 @@ io = require('socket.io').listen(server);
  * Initial database setup
  */
 
-//var connection_string = process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 //var client = new pg.Client(connection_string);
 //client.connect();
-//client.query('CREATE TABLE events (id SERIAL, lat float, long float, event_date timestamp);');
+//client.query('CREATE TABLE events (id SERIAL PRIMARY KEY, name varchar);');
 
 
 //Routes
@@ -49,6 +55,7 @@ app.get('/admin/:id/results', admin.results);
 app.get('/device', device.index);
 app.get('/device/:id/shake', device.shake);
 app.post('/device/shook', device.shook);
+app.post('/device/exit', device.exit);
 
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());

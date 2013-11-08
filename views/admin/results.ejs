@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Event <%= event%></title>
+    <title>Viewing Results</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="http://code.highcharts.com/highcharts.js"></script>
@@ -114,11 +114,18 @@
     	var socket = io.connect('http://localhost:3000');
 		socket.emit('event', '<%= event %>');
 		
+		socket.on('exit', function (data) {
+			delete total_participants[data.user];
+			var point = participant_chart.series[1].points[0];
+     		point.update(Object.keys(total_participants).length);
+		});
+		
 		socket.on('join', function (data) {
 			total_participants[data.user] = new Date().getTime();
 			var point = participant_chart.series[1].points[0];
      		point.update(Object.keys(total_participants).length);
 		});
+
 		
 		socket.on('message', function (data) {
 			current_participants[data.user] = new Date().getTime();
