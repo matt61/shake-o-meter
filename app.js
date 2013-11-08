@@ -45,15 +45,11 @@ io = require('socket.io').listen(server);
  * Initial database setup
  */
 
-//var client = new pg.Client(connection_string);
-//client.connect();
-//client.query('CREATE TABLE events (id SERIAL PRIMARY KEY, name varchar);');
-
-
 //Routes
 app.get('/', routes.index);
 app.get('/admin', admin.index);
 app.get('/admin/:id/participants', admin.participants);
+app.get('/admin/:id/history', admin.history);
 app.get('/admin/:id/results', admin.results);
 app.get('/device', device.index);
 app.get('/device/:id/shake', device.shake);
