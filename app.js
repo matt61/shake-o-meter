@@ -10,11 +10,10 @@ var http = require('http');
 var path = require('path');
 var pg = require('pg').native;
 var orm = require('orm');
-var connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 
 var app = express();
 
-app.use(orm.express(connection_string, {
+app.use(orm.express('postgres://ktzgqwpqafeggl:sR05D8Gt8HZ6SEICxRov96f-j1@ec2-54-225-255-208.compute-1.amazonaws.com:5432/d3dojfddkplub6', {
     define: function (db, models, next) {
         models.event = db.define("events", {id: Number, name: String,});
         next();
