@@ -10,7 +10,8 @@
     "npm":  "1.2.x"
   },
   "dependencies": {
-    "express": "3.4.4",
+    "pg": "0.6.15",
+  	"express": "latest",
     "ejs": "*",
     "stylus": "*",
     "pg": "*",
