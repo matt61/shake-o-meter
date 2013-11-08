@@ -13,6 +13,7 @@
 
     	var clapping_chart;
     	var participant_chart;
+    	var current_claps = Object();
     	var current_participants = Object();
     	var total_participants = Object();
     	$(function () {
@@ -45,14 +46,20 @@
 		    },
 		     function(clapping_chart) {
 		        setInterval(function() {
-		            var point = clapping_chart.series[0].points[0];
-		            var newVal;
-		    
-		            if (point.y > 0) {
-		                newVal = point.y - 2;
+		        							
+					var newVal = 0;
+					
+					for (var key in current_claps) {
+		            	newVal += parseInt(current_claps[key]);
 		            }
-		    
-		            point.update(newVal);
+		            
+		            if (newVal > 200){
+		            	newVal = 200;
+		            }
+		     
+		     		var point = clapping_chart.series[0].points[0];
+			        point.update(newVal);
+			        
 		    
 		        }, 100);
 		    
@@ -99,8 +106,9 @@
 		            var now = new Date().getTime();
 		            
 		            for (var key in current_participants) {
-		            	if (current_participants[key] < now - 1000){
+		            	if (current_participants[key] < now - 3000){
 		            		delete current_participants[key];
+		            		delete current_claps[key];
 		            	}
 		            }
 
@@ -130,14 +138,13 @@
 		socket.on('message', function (data) {
 			current_participants[data.user] = new Date().getTime();
 			
-			var point = clapping_chart.series[0].points[0];
-			var newVal;
-     
-	        if (point.y < 200) {
-	            newVal = point.y + parseInt(data.power);
-	        }
-	
-	        point.update(newVal);
+			if (!(data.user in total_participants)){
+				total_participants[data.user] = new Date().getTime();
+				var point = participant_chart.series[1].points[0];
+     			point.update(Object.keys(total_participants).length);
+			}
+			
+			current_claps[data.user] = parseInt(data.power);
 		});
     	
 	</script>

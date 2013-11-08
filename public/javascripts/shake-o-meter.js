@@ -83,7 +83,10 @@
         deltaZ = Math.abs(this.lastZ - current.z);
 
         if (((deltaX > this.threshold) && (deltaY > this.threshold)) || ((deltaX > this.threshold) && (deltaZ > this.threshold)) || ((deltaY > this.threshold) && (deltaZ > this.threshold))) {
-            //calculate time in milliseconds since last shake registered
+        	//calculate "amplitude" of shake:
+        	//amplitude = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+        	
+        	//calculate time in milliseconds since last shake registered
             currentTime = new Date();
             timeDifference = currentTime.getTime() - this.lastTime.getTime();
 

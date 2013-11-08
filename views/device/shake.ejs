@@ -19,18 +19,17 @@
 	</head>
 
 	<body>
+		<h3>Shake-O-Meter</h3>
+		<h4>You are in event: <%= event %></h4>
 		<div>
-			You are in event: <%= event %>
 			<form id="manual">
-				<input type="text" id="motion" value="clap">
-				<input type="text" id="amplitude" value="1">
-				<input type="text" id="frequency" value="1">
-				<input type="submit" id="manual" value="Go">
+				Aplitude:<input type="text" id="amplitude" value="2">
+				Frequency (Hz):<input type="text" id="frequency" value="5">
+				<input type="submit" id="manual" value="Clap">
 			</form>
 		</div>
-		<div id="content">
-			<a href="../">Exit Poll</a>
-		</div>
+		<img src="/images/shake.jpg" width="100%"/>
+		
 		
 		<script type="text/javascript">
 		
@@ -39,7 +38,7 @@
 				var motion = $("#motion").val();
 				var frequency = $("#frequency").val();
 				var amplitude = $("#amplitude").val();
-				$.post( "../shook", {event: <%= event %>, motion: motion, frequency: frequency, amplitude: amplitude }).done(function( data ) {
+				$.post( "../shook", {event: <%= event %>, motion: 'clap', frequency: frequency, amplitude: amplitude }).done(function( data ) {
 					console.log( "Response: " + data );
 				});
 			});
