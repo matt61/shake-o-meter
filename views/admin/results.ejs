@@ -129,7 +129,7 @@
 		            var now = new Date().getTime();
 		            
 		            for (var key in current_participants) {
-		            	if (parseInt(current_participants[key]) < now - parseInt($('#scaler').val())){
+		            	if (parseInt(current_participants[key]) < now - parseInt($('#decay').val())){
 		            		delete current_participants[key];
 		            		delete current_claps[key];
 		            	}
