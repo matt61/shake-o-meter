@@ -9,12 +9,12 @@ var device = require('./routes/device');
 var http = require('http');
 var path = require('path');
 var pg = require('pg').native;
-orm = require('orm');
-//connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
+var orm = require('orm');
+var connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 
 var app = express();
 
-app.use(orm.express(process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake', {
+app.use(orm.express(connection_string, {
     define: function (db, models, next) {
         models.event = db.define("events", {id: Number, name: String,});
         next();
