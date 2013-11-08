@@ -2,21 +2,31 @@
 <html>
   <head>
     <title>Clap-O-Meter</title>
+    <style>
+    	body {
+    		font-family: verdana;
+    	}
+    </style>
+  </head>
   <body>
-    <img src="images/clapping.png" width="150;"/>
-    <h1>Welcome to the Clap-O-Meter!</h1>
-
+  	<table>
+	  	<tr>
+	  		<td>
+	    		<img src="images/clapping.png" width="150;"/>
+	    	</td>
+	    	<td>
+	    		<h1>Welcome to the Clap-O-Meter!</h1>
+	    	</td>
+	    </tr>
+    </table>
     <p>
     	Please select an event to participate in!
     </p>
-    <table>
+    <table border="1" cellpadding="5">
 	    <% events.forEach(function(event){ %>
 	    <tr>
 	    	<td>
 	    		<b><%= event.name %></b>
-	    	</td>
-	    	<td>
-	    		<a href="device/<%= event.id %>/shake">Join</a>
 	    	</td>
 	    	<td>
 	    		<a href="admin/<%= event.id %>/results">View Results</a>

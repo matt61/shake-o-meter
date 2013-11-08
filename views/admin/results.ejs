@@ -39,7 +39,6 @@
 		        }],
 		    
 		        series: [{
-		            name: 'Enthusiasm',
 		            data: [0],
 		        }]
 		    
@@ -151,9 +150,10 @@
 	</script>
   </head>
   <body>
-  	<b>Watching Event: <%= name%>
-    <div id="container_1" style="min-width: 400px; height: 500px; margin: 0 auto"></div>
-    <div id="container_2" style="min-width: 400px; height: 500px; margin: 0 auto"></div>
-    <input type="text" id="scaler" value="1"/>
+  	<div style="font-weight: bold;">Dashboard: <%= name%></div>
+    <div id="container_1" style="float:left;"></div>
+    <div id="container_2" style="float:left;"></div>
+    <br style="clear: both;"/>
+    <input type="text" id="scaler" value="1" size="2"/>
   </body>
 </html>
