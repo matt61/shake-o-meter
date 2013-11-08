@@ -47,14 +47,18 @@
 		     function(clapping_chart) {
 		        setInterval(function() {
 		        							
-					var newVal = 0;
+					var newVal = Math.round((Math.random() - 0.5) * 10);
 					
 					for (var key in current_claps) {
 		            	newVal += parseInt(current_claps[key]);
 		            }
-		            
+		           	            
 		            if (newVal > 200){
 		            	newVal = 200;
+		            }
+		            
+		            if (newVal < 0){
+		            	newVal = 0;
 		            }
 		     
 		     		var point = clapping_chart.series[0].points[0];
