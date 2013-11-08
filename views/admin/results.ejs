@@ -119,7 +119,8 @@
 		    });
 		});
     	
-    	var socket = io.connect('http://localhost:3000');
+    	var URL = window.location.protocol + "//" + window.location.host;
+    	var socket = io.connect(URL);
 		socket.emit('event', '<%= event %>');
 		
 		socket.on('exit', function (data) {
