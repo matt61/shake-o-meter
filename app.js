@@ -10,17 +10,17 @@ var http = require('http');
 var path = require('path');
 var pg = require('pg').native;
 var orm = require('orm');
-var connection_string =  process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake';
 var app = express();
 
-app.use(orm.express(connection_string, {
+
+// all environments
+app.set('conn', process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake');
+app.use(orm.express(app.get('conn'), {
     define: function (db, models, next) {
         models.event = db.define("events", {id: Number, name: String,});
         next();
     }
 }));
-
-// all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
