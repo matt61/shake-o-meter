@@ -14,9 +14,10 @@ exports.shake = function(req, res){
 };
 exports.shook = function(req, res){
 	var power = parseFloat(req.body.frequency)*parseFloat(req.body.amplitude);
-	io.sockets.in(req.body.event).emit('message', {user: req.sessionID, motion: req.body.motion, power: power});
+	var seconds = new Date().getTime() / 1000;
 	
-	var seconds = new Date().getTime() / 1000
+	io.sockets.in(req.body.event).emit('message', {user: req.sessionID, motion: req.body.motion, power: power, response_time: seconds});
+		
 	req.models.response.find({event_id: req.body.event, response_time: seconds}, 1, function(err, responses) {
 	  if (responses.length > 0){
 		  responses[0].response_count = events[0].response_count + power;

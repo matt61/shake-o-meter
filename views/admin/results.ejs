@@ -164,7 +164,10 @@
 
 		
 		socket.on('message', function (data) {
+			var scaled_value = parseInt(data.power)/$('#scaler').val();
+
 			current_participants[data.user] = new Date().getTime();
+			history_chart.series[0].addPoint([data.response_time, scaled_value]);
 			
 			if (!(data.user in total_participants)){
 				total_participants[data.user] = new Date().getTime();
@@ -172,7 +175,7 @@
      			point.update(Object.keys(total_participants).length);
 			}
 			
-			current_claps[data.user] = parseInt(data.power)/$('#scaler').val();
+			current_claps[data.user] = scaled_value;
 		});
 		
 		function requestHistory() {
