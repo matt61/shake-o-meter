@@ -14,7 +14,7 @@ var app = express();
 
 
 // all environments
-app.set('conn', process.env.DATABASE_URL || 'postgres://polls:password@localhost:5432/shake');
+app.set('conn', process.env.HEROKU_POSTGRESQL_SILVER_URL || 'postgres://polls:password@localhost:5432/shake');
 app.use(orm.express(app.get('conn'), {
     define: function (db, models, next) {
         models.event = db.define("events", {id: Number, name: String,});
