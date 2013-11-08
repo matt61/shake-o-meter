@@ -2,38 +2,28 @@
 <html>
   <head>
     <title>Shake-O-Meter</title>
-    <style>
-    	body {
-    		font-family: verdana;
-    	}
-    </style>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-  	<table>
-	  	<tr>
-	  		<td>
-	    		<img src="images/clapping.png" width="150;"/>
-	    	</td>
-	    	<td>
-	    		<h1>Welcome to the Shake-O-Meter!</h1>
-	    	</td>
-	    </tr>
-    </table>
-    <p>
-    	Please select an event to participate in!
-    </p>
-    <table border="1" cellpadding="5">
-	    <% events.forEach(function(event){ %>
-	    <tr>
-	    	<td>
-	    		<b><%= event.name %></b>
-	    	</td>
-	    	<td>
-	    		<a href="admin/<%= event.id %>/results">View Results</a>
-	    	</td>
-	    </tr>
-	  	<% }) %>
-  	</table>
-    
+  	<div class="header">Shake-O-Meter</div>
+  	<div class="subhead">Shake-O-Meter</div>
+  	<div class="content">
+  		<div>
+	  		<p>
+		    	Real-time analytics for your event!
+		    </p>
+	    </div>
+	    <p>
+	    	Please select an event to participate in:
+	    </p>
+	    <ul>
+		    <% events.forEach(function(event){ %>
+		    	<li>
+		    		<a href="admin/<%= event.id %>/results"><%= event.name %></a>
+		    	</li>
+		  	<% }) %>
+	  	</ul>
+  	</div>
+    </div>
   </body>
 </html>
