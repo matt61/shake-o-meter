@@ -69,6 +69,9 @@
 		        chart: {
 		            renderTo: 'container_2',
 		            type: 'bar',
+		            events: {
+		                load: requestParticipantCount
+		            }
 		        },
 		    
 		        title: {
@@ -146,6 +149,22 @@
 			
 			current_claps[data.user] = parseInt(data.power)/$('#scaler').val();
 		});
+		
+		function requestParticipantCount() {
+		    $.ajax({
+		        url: 'participants',
+		        type: "GET",
+		        dataType: "json",
+		        success: function(data) {
+		        	for (var i=0; i<data.length; i++) {
+					    total_participants[data[i].uid] = new Date().getTime();
+					}
+		            var point = participant_chart.series[1].points[0];
+     				point.update(data.length);
+		        },
+		        cache: false
+		    });
+		}
     	
 	</script>
   </head>

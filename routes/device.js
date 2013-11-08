@@ -13,6 +13,24 @@ exports.shake = function(req, res){
   }) 
 };
 exports.shook = function(req, res){
-	io.sockets.in(req.body.event).emit('message', {user: req.sessionID, motion: req.body.motion, power: parseFloat(req.body.frequency)*parseFloat(req.body.amplitude)});
+	var power = parseFloat(req.body.frequency)*parseFloat(req.body.amplitude);
+	io.sockets.in(req.body.event).emit('message', {user: req.sessionID, motion: req.body.motion, power: power});
+	
+	var seconds = new Date().getTime() / 1000
+	req.models.response.find({event_id: req.body.event, response_time: seconds}, 1, function(err, responses) {
+	  if (responses.length > 0){
+		  responses[0].response_count = events[0].response_count + power;
+		  responses[0].save(function (err) {
+	        console.log("saved!");
+		  });
+	  } else {
+		  req.models.response.create([{event_id: req.body.event, response_time: seconds, response_count: power}], function (err, items) {});
+	  }
+	}) 
+	req.models.participant.find({event_id: req.body.event, uid: req.sessionID}, 1, function(err, participants) {
+	  if (participants.length == 0){
+		  req.models.participant.create([{event_id: req.body.event, uid: req.sessionID}], function (err, items) {});
+	  }
+	}) 
 	res.send('OK');
 };

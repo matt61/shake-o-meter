@@ -18,6 +18,8 @@ app.set('conn', process.env.HEROKU_POSTGRESQL_SILVER_URL || 'postgres://polls:pa
 app.use(orm.express(app.get('conn'), {
     define: function (db, models, next) {
         models.event = db.define("events", {id: Number, name: String,});
+        models.participant = db.define("participants", {uid: String, event_id: Number});
+        models.response = db.define("responses", {response_time: Number, response_count: Number, event_id: Number});
         next();
     }
 }));
@@ -51,6 +53,7 @@ io = require('socket.io').listen(server);
 //Routes
 app.get('/', routes.index);
 app.get('/admin', admin.index);
+app.get('/admin/:id/participants', admin.participants);
 app.get('/admin/:id/results', admin.results);
 app.get('/device', device.index);
 app.get('/device/:id/shake', device.shake);
