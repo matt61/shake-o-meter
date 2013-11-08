@@ -7,8 +7,12 @@ exports.participants = function(req, res) {
 	})
 };
 exports.history = function(req, res) {
+	history = [];
 	req.models.response.find({event_id: req.params.id}, function(err, responses) {
-		res.send(responses);
+		for(var i=0;i<responses.length;i++){
+			history.push([responses[i].response_time, responses[i].response_count]);
+		}
+		res.send(history);
 	})
 };
 exports.results = function(req, res) {
