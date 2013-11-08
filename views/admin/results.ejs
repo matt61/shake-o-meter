@@ -129,7 +129,7 @@
 		            var now = new Date().getTime();
 		            
 		            for (var key in current_participants) {
-		            	if (current_participants[key] < now - 3000){
+		            	if (parseInt(current_participants[key]) < now - 5000){
 		            		delete current_participants[key];
 		            		delete current_claps[key];
 		            	}
